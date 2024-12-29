@@ -1,0 +1,48 @@
+#include <Servo.h>
+
+#define TRIG_PIN 8  // Ultrasonic sensor trigger pin
+#define ECHO_PIN 9  // Ultrasonic sensor echo pin
+#define SERVO_PIN 6 // Servo motor control pin
+
+Servo gateServo;
+
+void setup() {
+  pinMode(TRIG_PIN, OUTPUT);
+  pinMode(ECHO_PIN, INPUT);
+  gateServo.attach(SERVO_PIN);
+  
+  gateServo.write(0); // Initialize gate closed
+  Serial.begin(9600); // Start serial communication
+}
+
+void loop() {
+  long duration, distance;
+
+  // Trigger ultrasonic sensor
+  digitalWrite(TRIG_PIN, LOW);
+  delayMicroseconds(2);
+  digitalWrite(TRIG_PIN, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(TRIG_PIN, LOW);
+
+  // Measure the echo time
+  duration = pulseIn(ECHO_PIN, HIGH);
+
+  // Calculate distance in cm
+  distance = duration * 0.034 / 2;
+
+  Serial.print("Distance: ");
+  Serial.print(distance);
+  Serial.println(" cm");
+
+  // If object detected within 10 cm, open the gate
+  if (distance > 0 && distance <= 30) {
+    Serial.println("Vehicle detected. Opening gate...");
+    gateServo.write(90); // Open the gate
+    delay(5000);         // Wait for vehicle to pass
+    Serial.println("Closing gate...");
+    gateServo.write(0);  // Close the gate
+  }
+  
+  delay(1000); // Wait before next measurement
+}

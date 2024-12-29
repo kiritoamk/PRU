@@ -1,0 +1,29 @@
+#define VOLTAGE_PIN A0 // Analog pin for voltage measurement
+#define LED_PIN 13     // Digital pin to control LED
+
+void setup() {
+  pinMode(VOLTAGE_PIN, INPUT); // Set voltage pin as input
+  pinMode(LED_PIN, OUTPUT);    // Set LED pin as output
+  Serial.begin(9600);          // Start serial communication
+}
+
+void loop() {
+  int sensorValue = analogRead(VOLTAGE_PIN);          // Read analog value
+  float voltage = sensorValue * (5.0 / 1023.0);      // Convert analog value to voltage (0-5V)
+
+  // Display voltage on Serial Monitor
+  Serial.print("Voltage: ");
+  Serial.print(voltage);
+  Serial.println(" V");
+
+  // Check voltage level and control LED
+  if (voltage < 3.0) {
+    digitalWrite(LED_PIN, HIGH); // Turn on LED
+    Serial.println("LED ON");
+  } else {
+    digitalWrite(LED_PIN, LOW);  // Turn off LED
+    Serial.println("LED OFF");
+  }
+
+  delay(1000); // Wait for 1 second before the next reading
+}

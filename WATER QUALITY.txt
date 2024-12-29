@@ -1,0 +1,41 @@
+#define TURBIDITY_PIN A0
+#define ULTRASONIC_TRIG 9
+#define ULTRASONIC_ECHO 10
+#define LED_PIN 3
+#define BUZZER_PIN 4
+
+void setup() {
+  pinMode(ULTRASONIC_TRIG, OUTPUT);
+  pinMode(ULTRASONIC_ECHO, INPUT);
+  pinMode(TURBIDITY_PIN, INPUT);
+  pinMode(LED_PIN, OUTPUT);
+  pinMode(BUZZER_PIN, OUTPUT);
+  Serial.begin(9600);
+}
+
+void loop() {
+  digitalWrite(ULTRASONIC_TRIG, LOW);
+  delayMicroseconds(2);
+  digitalWrite(ULTRASONIC_TRIG, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(ULTRASONIC_TRIG, LOW);
+
+  long duration = pulseIn(ULTRASONIC_ECHO, HIGH);
+  int distance = duration * 0.034 / 2;
+  int turbidity = analogRead(TURBIDITY_PIN);
+
+  Serial.print("Distance: ");
+  Serial.println(distance);
+  Serial.print("Turbidity: ");
+  Serial.println(turbidity);
+
+  if (turbidity > 700) { // Adjust threshold as needed
+    digitalWrite(LED_PIN, HIGH);
+    digitalWrite(BUZZER_PIN, HIGH);
+  } else {
+    digitalWrite(LED_PIN, LOW);
+    digitalWrite(BUZZER_PIN, LOW);
+  }
+
+  delay(500);
+}

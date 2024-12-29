@@ -1,0 +1,40 @@
+#include <DHT.h>
+#include <Servo.h>
+
+#define SOIL_MOISTURE_PIN A0
+#define DHT_PIN 7
+#define DHT_TYPE DHT22
+#define SERVO_PIN 9
+
+DHT dht(DHT_PIN, DHT_TYPE);
+Servo servo;
+
+void setup() {
+  pinMode(SOIL_MOISTURE_PIN, INPUT);
+  servo.attach(SERVO_PIN); // Attach servo to pin 9
+  Serial.begin(9600);
+  dht.begin();
+}
+
+void loop() {
+  int soilMoisture = analogRead(SOIL_MOISTURE_PIN);
+  float temp = dht.readTemperature();
+  float humidity = dht.readHumidity();
+
+  // Print readings to Serial Monitor
+  Serial.print("Soil Moisture: ");
+  Serial.println(soilMoisture);
+  Serial.print("Temperature: ");
+  Serial.println(temp);
+  Serial.print("Humidity: ");
+  Serial.println(humidity);
+
+  // Control Servo Motor based on Soil Moisture
+  if (soilMoisture < 300) { // Adjust the threshold as needed
+    servo.write(90); // Rotate servo to 90 degrees (simulate pump ON)
+  } else {
+    servo.write(0); // Rotate servo to 0 degrees (simulate pump OFF)
+  }
+
+  delay(1000); // Delay for stability
+}

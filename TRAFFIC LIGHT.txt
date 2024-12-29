@@ -1,0 +1,31 @@
+// Pin definitions for LEDs
+const int redPin = 13;
+const int yellowPin = 12;
+const int greenPin = 11;
+
+void setup() {
+  // Set the LED pins as OUTPUT
+  pinMode(redPin, OUTPUT);
+  pinMode(yellowPin, OUTPUT);
+  pinMode(greenPin, OUTPUT);
+}
+
+void loop() {
+  // Red light ON for 5 seconds
+  digitalWrite(redPin, HIGH);    // Turn on Red LED
+  digitalWrite(yellowPin, LOW); // Turn off Yellow LED
+  digitalWrite(greenPin, LOW);  // Turn off Green LED
+  delay(5000);                  // Wait for 5 seconds
+
+  // Yellow light ON for 2 seconds after red
+  digitalWrite(redPin, LOW);     // Turn off Red LED
+  digitalWrite(yellowPin, HIGH); // Turn on Yellow LED
+  digitalWrite(greenPin, LOW);   // Turn off Green LED
+  delay(2000);                  // Wait for 2 seconds
+
+  // Green light ON for 3 seconds after yellow
+  digitalWrite(redPin, LOW);    // Turn off Red LED
+  digitalWrite(yellowPin, LOW); // Turn off Yellow LED
+  digitalWrite(greenPin, HIGH); // Turn on Green LED
+  delay(3000);                  // Wait for 3 seconds
+}
